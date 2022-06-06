@@ -30,12 +30,12 @@ exports.create = (req, res) => {
     })
 }
 exports.find = (req, res) => {
-    // if (!req.params.username) {
-    //     res.status(400).send({
-    //         message: '用户名不能为空！'
-    //     })
-    //     return;
-    // }
+    if (!req.params.username) {
+        res.status(400).send({
+            message: '用户名不能为空！'
+        })
+        return;
+    }
 
     User.findAll({
         where: {
@@ -118,11 +118,4 @@ exports.editUserImg = (req, res) => {
         }).then((data)=>{
             res.send(data);
         })
-    // User.findOne({
-    //     where: {
-    //         userName: req.body.username
-    //     }
-    // }).then((data)=>{
-    //     res.send(data);
-    // })
 }
