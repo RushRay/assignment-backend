@@ -29,8 +29,9 @@ exports.create = (req, res) => {
         })
     })
 }
+
 exports.find = (req, res) => {
-    if (!req.params.username) {
+    if (!req.query.username) {
         res.status(400).send({
             message: '用户名不能为空！'
         })
@@ -50,24 +51,20 @@ exports.find = (req, res) => {
         })
     })
 }
-exports.updateNickName = (req, res) => {
-    if (!req.body.username) {
+
+exports.updateSign = (req, res) => {
+    if (!req.query.username) {
         res.status(400).send({
             message: '用户名不能为空！'
         })
         return;
     }
 
-    if (!req.body.nickName) {
-        res.status(400).send({
-            message: '昵称不能为空！'
-        })
-        return;
-    }
+    console.log(req.query.username)
 
     if (!User.findAll({
         where: {
-            userName: req.body.username
+            userName: req.query.username
         }
     })) {
         res.status(400).send({
@@ -78,15 +75,15 @@ exports.updateNickName = (req, res) => {
 
     User.update(
         {
-            nickName: req.body.nickName
+            sign: req.query.sign
         },
         {
-        where: {
-            userName: {
-                [Op.eq]: req.body.username
+            where: {
+                userName: {
+                    [Op.eq]: req.query.username
+                }
             }
-        }
-    }).then(date => {
+        }).then(data => {
         res.send(data)
     }).catch(err => {
         res.status(500).send({
@@ -95,6 +92,47 @@ exports.updateNickName = (req, res) => {
         })
     })
 }
+
+exports.updateNickName = (req, res) => {
+    if (!req.query.username) {
+        res.status(400).send({
+            message: '用户名不能为空！'
+        })
+        return;
+    }
+
+
+    if (!req.query.nickName) {
+        res.status(400).send({
+            message: '昵称不能为空！'
+        })
+        return;
+    }
+
+    if (!User.findAll({
+        where: {
+            userName: req.query.username
+        }
+    })) {
+        res.status(400).send({
+            message: '该用户不存在'
+        })
+        return;
+    }
+
+    User.update(
+        {
+            nickName: req.query.nickName
+        },
+        {
+        where: {
+            userName: {
+                [Op.eq]: req.query.username
+            }
+        }
+    })
+}
+
 exports.editUserImg = (req, res) => {
     const file = req.file
 
